@@ -99,9 +99,9 @@
 <br>     6.9 <a href="#assignment-expression">Assignment Expression</a>
 <br>     6.10 <a href="#declarations-and-definitions">Declarations and Definitions</a>
 <br>     6.11 <a href="#statments">Statements</a>
-<br>    <br>     6.11.1 <a href="#expression-statement">Expression Statement</a>
-<br>    <br>     6.11.2 <a href="#if-else-statements">If-Else Statements</a>
-<br>    <br>     6.11.3 <a href="#loop-statements">Loop Statements</a>
+<br>         6.11.1 <a href="#expression-statement">Expression Statement</a>
+<br>         6.11.2 <a href="#if-else-statements">If-Else Statements</a>
+<br>         6.11.3 <a href="#loop-statements">Loop Statements</a>
 </li>
 <li><a href="#grammar">Grammar</a></li>
 </ol><h1>
@@ -798,6 +798,116 @@ expression : assignment_expr
 <p>The while loop works by first evaluating the expression contained within the parentheses and executing the statement if the expression evaluates to true. The loop will continue to evaluate this expression before each iteration until it evaluates to false, at which point the loop will terminate.</p>
 
 <p>The first expression of the for loop is evaluated once and is generally used for the initialization mechanism of loop. The second expression is evaluated before each iteration of the for loop and is analogous to the parenthesized expression in the while loop. Note that a missing second expression will be evaluated to true. The third and final expression is evaluated at the end of each iteration, after the statement has been executed, and is generally used to update the state of the loop (e.g. a counter).</p>
+
+<h1>
+<a name="grammar" class="anchor" href="#grammar"><span class="octicon octicon-link"></span></a>Grammar</h1>
+
+<pre><code>Rule 0     S' -&gt; outer_unit
+Rule 1     outer_unit -&gt; lang_def translation_unit
+Rule 2     lang_def -&gt; LANG ASSIGN ID SEMICOLON
+Rule 3     lang_def -&gt; LANG ASSIGN NONE SEMICOLON
+Rule 4     translation_unit -&gt; external_declaration
+Rule 5     translation_unit -&gt; translation_unit external_declaration
+Rule 6     external_declaration -&gt; function_def
+Rule 7     external_declaration -&gt; type ID SEMICOLON
+Rule 8     external_declaration -&gt; type ID ASSIGN assignment_expr SEMICOLON
+Rule 9     function_def -&gt; VOID ID LPAREN param_list RPAREN brack_stmt
+Rule 10    function_def -&gt; type ID LPAREN param_list RPAREN brack_stmt
+Rule 11    function_def -&gt; MAIN LPAREN param_list RPAREN brack_stmt
+Rule 12    type -&gt; INT
+Rule 13    type -&gt; DOUBLE
+Rule 14    type -&gt; BOOLEAN
+Rule 15    type -&gt; CHAR
+Rule 16    type -&gt; STRING
+Rule 17    type -&gt; FUNCT
+Rule 18    type -&gt; INPUT
+Rule 19    type -&gt; OUTPUT
+Rule 20    type -&gt; FILE
+Rule 21    type -&gt; type LBRACKET RBRACKET
+Rule 22    ref_type -&gt; ID LBRACKET assignment_expr RBRACKET
+Rule 23    param_list -&gt; param_list COMMA parameter
+Rule 24    param_list -&gt; parameter
+Rule 25    parameter -&gt; type ID
+Rule 26    parameter -&gt; empty
+Rule 27    brack_stmt -&gt; LBRACE stmts RBRACE
+Rule 28    stmts -&gt; stmts stmt
+Rule 29    stmts -&gt; stmt
+Rule 30    stmts -&gt; brack_stmt
+Rule 31    stmt -&gt; expression_stmt
+Rule 32    stmt -&gt; ifelse_stmt
+Rule 33    stmt -&gt; loop_stmt
+Rule 34    stmt -&gt; jump_stmt
+Rule 35    expression_stmt -&gt; expression SEMICOLON
+Rule 36    expression -&gt; assignment_expr
+Rule 37    expression -&gt; type ID
+Rule 38    expression -&gt; empty
+Rule 39    assignment_expr -&gt; FUNCT ID ASSIGN LBRACE funct_name COMMA LPAREN reserved_languages_list RPAREN COMMA primary_expr RBRACE
+Rule 40    assignment_expr -&gt; type ID ASSIGN assignment_expr
+Rule 41    assignment_expr -&gt; ID ASSIGN assignment_expr
+Rule 42    assignment_expr -&gt; logical_OR_expr
+Rule 43    funct_name -&gt; __MAIN__
+Rule 44    funct_name -&gt; primary_expr
+Rule 45    logical_OR_expr -&gt; logical_AND_expr
+Rule 46    logical_OR_expr -&gt; logical_OR_expr OR logical_AND_expr
+Rule 47    logical_AND_expr -&gt; equality_expr
+Rule 48    logical_AND_expr -&gt; logical_AND_expr AND equality_expr
+Rule 49    equality_expr -&gt; relational_expr
+Rule 50    equality_expr -&gt; equality_expr EQ relational_expr
+Rule 51    equality_expr -&gt; equality_expr NEQ relational_expr
+Rule 52    relational_expr -&gt; additive_expr
+Rule 53    relational_expr -&gt; relational_expr LS_OP additive_expr
+Rule 54    relational_expr -&gt; relational_expr LE_OP additive_expr
+Rule 55    relational_expr -&gt; relational_expr GR_OP additive_expr
+Rule 56    relational_expr -&gt; relational_expr GE_OP additive_expr
+Rule 57    additive_expr -&gt; multiplicative_expr
+Rule 58    additive_expr -&gt; additive_expr PLUS multiplicative_expr
+Rule 59    additive_expr -&gt; additive_expr MINUS multiplicative_expr
+Rule 60    multiplicative_expr -&gt; secondary_expr
+Rule 61    multiplicative_expr -&gt; multiplicative_expr TIMES secondary_expr
+Rule 62    multiplicative_expr -&gt; multiplicative_expr DIVIDE secondary_expr
+Rule 63    secondary_expr -&gt; primary_expr
+Rule 64    secondary_expr -&gt; LPAREN identifier_list RPAREN
+Rule 65    secondary_expr -&gt; LBRACE identifier_list RBRACE
+Rule 66    primary_expr -&gt; ID
+Rule 67    primary_expr -&gt; STRINGLITERAL
+Rule 68    primary_expr -&gt; NUMBER
+Rule 69    primary_expr -&gt; DECIMAL
+Rule 70    primary_expr -&gt; TRUE
+Rule 71    primary_expr -&gt; FALSE
+Rule 72    primary_expr -&gt; function_call
+Rule 73    primary_expr -&gt; ref_type
+Rule 74    function_call -&gt; ID LPAREN identifier_list RPAREN
+Rule 75    function_call -&gt; STRING LPAREN logical_OR_expr RPAREN
+Rule 76    function_call -&gt; INT LPAREN logical_OR_expr RPAREN
+Rule 77    function_call -&gt; BOOLEAN LPAREN logical_OR_expr RPAREN
+Rule 78    function_call -&gt; DOUBLE LPAREN logical_OR_expr RPAREN
+Rule 79    function_call -&gt; PRINT LPAREN logical_OR_expr RPAREN
+Rule 80    function_call -&gt; ID PERIOD lib_function LPAREN identifier_list RPAREN
+Rule 81    lib_function -&gt; ASSERT
+Rule 82    lib_function -&gt; REMOVE
+Rule 83    lib_function -&gt; SIZE
+Rule 84    lib_function -&gt; INSERT
+Rule 85    lib_function -&gt; REPLACE
+Rule 86    lib_function -&gt; READLINES
+Rule 87    reserved_languages_list -&gt; reserved_language_keyword
+Rule 88    reserved_languages_list -&gt; reserved_languages_list COMMA reserved_language_keyword
+Rule 89    reserved_language_keyword -&gt; RES_LANG LBRACKET RBRACKET
+Rule 90    reserved_language_keyword -&gt; reserved_language_keyword TIMES
+Rule 91    reserved_language_keyword -&gt; RES_LANG
+Rule 92    reserved_language_keyword -&gt; empty
+Rule 93    identifier_list -&gt; logical_OR_expr
+Rule 94    identifier_list -&gt; identifier_list COMMA VERBOSE
+Rule 95    identifier_list -&gt; identifier_list COMMA logical_OR_expr
+Rule 96    identifier_list -&gt; empty
+Rule 97    ifelse_stmt -&gt; IF LPAREN expression RPAREN brack_stmt
+Rule 98    ifelse_stmt -&gt; IF LPAREN expression RPAREN brack_stmt ELSE brack_stmt
+Rule 99    loop_stmt -&gt; WHILE LPAREN expression RPAREN brack_stmt
+Rule 100   loop_stmt -&gt; FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN brack_stmt
+Rule 101   jump_stmt -&gt; BREAK SEMICOLON
+Rule 102   jump_stmt -&gt; CONTINUE SEMICOLON
+Rule 103   jump_stmt -&gt; RETURN logical_OR_expr SEMICOLON
+Rule 104   empty -&gt; &lt;empty&gt;
+</code></pre>
       </section>
       <footer>
         <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
