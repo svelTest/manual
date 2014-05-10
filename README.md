@@ -54,9 +54,9 @@ For new programmers, our [tutorial](http://sveltest.github.io/tutorial) is a gre
 <br>&nbsp;&nbsp;&nbsp;&nbsp; 6.9 [Assignment Expression](#assignment-expression)
 <br>&nbsp;&nbsp;&nbsp;&nbsp; 6.10 [Declarations and Definitions](#declarations-and-definitions)
 <br>&nbsp;&nbsp;&nbsp;&nbsp; 6.11 [Statements](#statments)
-<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp; 6.11.1 [Expression Statement](#expression-statement)
-<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp; 6.11.2 [If-Else Statements](#if-else-statements)
-<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp; 6.11.3 [Loop Statements](#loop-statements)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6.11.1 [Expression Statement](#expression-statement)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6.11.2 [If-Else Statements](#if-else-statements)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6.11.3 [Loop Statements](#loop-statements)
 7. [Grammar](#grammar)
 
 # Introduction
