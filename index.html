@@ -1,0 +1,809 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Manual by svelTest</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Manual</h1>
+        <p class="header">svelTest Language Reference Manual</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/svelTest/manual/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/svelTest/manual/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/svelTest/manual">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/svelTest">svelTest</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="sveltest-language-reference-manual" class="anchor" href="#sveltest-language-reference-manual"><span class="octicon octicon-link"></span></a>svelTest Language Reference Manual</h1>
+
+<p>Welcome! This is the documentation for svelTest. Last updated May 10, 2014.</p>
+
+<p>For new programmers, our <a href="http://sveltest.github.io/tutorial">tutorial</a> is a great resource to help you get started.</p>
+
+<h1>
+<a name="table-of-contents" class="anchor" href="#table-of-contents"><span class="octicon octicon-link"></span></a>Table of Contents</h1>
+
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li>
+<a href="#lexical-conventions">Lexical Conventions</a>
+<br>     2.1 <a href="#tokens">Tokens</a>
+<br>     2.2 <a href="#comments">Comments</a>
+<br>     2.3 <a href="#identifiers">Identifiers</a>
+<br>     2.4 <a href="#keywords">Keywords</a>
+<br>     2.5 <a href="#reserved">Reserved</a>
+</li>
+<li>
+<a href="#types">Types</a>
+<br>     3.1 <a href="#basic-types">Basic Types</a>
+<br>         3.1.1 <a href="#tokens">int</a>
+<br>         3.1.2 <a href="#double">double</a>
+<br>         3.1.3 <a href="#boolean">boolean</a>
+<br>         3.1.4 <a href="#string">string</a>
+<br>         3.1.5 <a href="#file">file</a>
+<br>     3.2 <a href="#derived-types">Derived Types</a>
+<br>         3.2.1 <a href="#arrays">Arrays</a>
+<br>         3.2.2 <a href="#functions">Functions</a>
+<br>         3.2.3 <a href="#input">input</a>
+<br>         3.2.4 <a href="#output">output</a>
+<br>         3.2.5 <a href="#funct">funct</a>
+<br>             3.2.5.1 <a href="#assert">assert</a>
+<br>             3.2.5.2 <a href="#the-lang-declaration">The lang Declaration</a>
+<br>             3.2.5.3 <a href="#funct-restrictions">funct Restrictions</a>
+<br>             3.2.5.4 <a href="#funct-helper-files">funct Helper Files</a>
+<br>     3.3 <a href="#constants">Constants</a>
+<br>         3.3.1 <a href="#char-constants">char constants</a>
+<br>         3.3.2 <a href="#boolean-constants">boolean constants</a>
+</li>
+<li>
+<a href="#input--output">Input/Output</a>
+<br>     4.1 <a href="#print">print</a>
+<br>     4.2 <a href="#reading-from-files">Reading from files</a>
+<br>     4.3 <a href="#writing-to-files">Writing to files</a>
+</li>
+<li>
+<a href="#scope">Scope</a>
+<br>     5.1 <a href="#lexical-scope">Lexical Scope</a>
+<br>     5.2 <a href="#global-scope">Global Scope</a>
+<br>     5.3 <a href="#function-scope">Function Scope</a>
+<br>     5.4 <a href="#statement-block-scope">Statement Block Scope</a>
+<br>     5.5 <a href="#scope-of-functions">Scope of Functions</a>
+</li>
+<li>
+<a href="#expressions">Expressions</a>
+<br>     6.1 <a href="#primary-expressions">Primary Expressions</a>
+<br>     6.2 <a href="#function-calls">Function Calls</a>
+<br>     6.3 <a href="#multiplicative-operators">Multiplicative Operators</a>
+<br>     6.4 <a href="#additive-operators">Additive Operators</a>
+<br>     6.5 <a href="#relational-operators">Relational Operators</a>
+<br>     6.6 <a href="#equality-operators">Equality Operators</a>
+<br>     6.7 <a href="#logical-and-operator">Logical AND Operator</a>
+<br>     6.8 <a href="#logical-or-operator">Logical OR Operator</a>
+<br>     6.9 <a href="#assignment-expression">Assignment Expression</a>
+<br>     6.10 <a href="#declarations-and-definitions">Declarations and Definitions</a>
+<br>     6.11 <a href="#statments">Statements</a>
+<br>    <br>     6.11.1 <a href="#expression-statement">Expression Statement</a>
+<br>    <br>     6.11.2 <a href="#if-else-statements">If-Else Statements</a>
+<br>    <br>     6.11.3 <a href="#loop-statements">Loop Statements</a>
+</li>
+<li><a href="#grammar">Grammar</a></li>
+</ol><h1>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h1>
+
+<p>This manual describes the svelTest programming language, which provides numerous features to simplify the testing of production-level code. This manual follows the structure of Kernighan and Ritchie’s C Reference Manual, starting with a look at svelTest’s lexical conventions, its syntax, and finally its grammar.</p>
+
+<h1>
+<a name="lexical-conventions" class="anchor" href="#lexical-conventions"><span class="octicon octicon-link"></span></a>Lexical Conventions</h1>
+
+<h2>
+<a name="tokens" class="anchor" href="#tokens"><span class="octicon octicon-link"></span></a>Tokens</h2>
+
+<p>svelTest has six classes of tokens: identifiers, keywords, constants, string literals, operators, and other separators. The compiler considers blanks, tabs, newlines, and comments “whitespace”. Any whitespace is ignored by the compiler except when separating tokens.</p>
+
+<h2>
+<a name="comments" class="anchor" href="#comments"><span class="octicon octicon-link"></span></a>Comments</h2>
+
+<p>svelTest uses double forward slashes (<code>//</code>) for single-line comments, which terminate at the newline character.  Block comments use the standard forward slash-asterisk combination (<code>/*</code>), and may not be nested or exist in literal types.  A comment is treated by the compiler as a whitespace character and may exist anywhere a whitespace character is allowed.  The user cannot include comments within tokens.  The compiler ignores all characters in a comment.</p>
+
+<pre><code>// This is an inline comment
+</code></pre>
+
+<pre><code>/* This is a
+block comment */
+</code></pre>
+
+<pre><code>/* This is also
+* a block comment
+*/
+</code></pre>
+
+<h2>
+<a name="identifiers" class="anchor" href="#identifiers"><span class="octicon octicon-link"></span></a>Identifiers</h2>
+
+<p>An identifier is a token which names a svelTest language entity.  A token may consist of alphanumeric sequences of any length with underscores allowed, but cannot start with a number.  An identifier can represent a primitive, object, or function.</p>
+
+<h2>
+<a name="keywords" class="anchor" href="#keywords"><span class="octicon octicon-link"></span></a>Keywords</h2>
+
+<p>The following identifiers are reserved for use as keywords, and may not be used otherwise.</p>
+
+<table>
+<thead><tr>
+<th>Control flow</th>
+<th>svelTest primitives</th>
+<th>Other primitives</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>if</code></td>
+<td><code>funct</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td><code>else</code></td>
+<td><code>input</code></td>
+<td><code>boolean</code></td>
+</tr>
+<tr>
+<td><code>for</code></td>
+<td><code>output</code></td>
+<td><code>char</code></td>
+</tr>
+<tr>
+<td><code>while</code></td>
+<td><code>file</code></td>
+<td><code>double</code></td>
+</tr>
+<tr>
+<td><code>return</code></td>
+<td><code>__main__</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><code>break</code></td>
+<td><code>verbose</code></td>
+<td><code>void</code></td>
+</tr>
+<tr>
+<td><code>continue</code></td>
+<td><code>lang</code></td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td><code>true</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table><p>The following function names are also reserved:</p>
+
+<table>
+<thead><tr>
+<th>Standard</th>
+<th>Array functions</th>
+<th>File reading</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>main</code></td>
+<td><code>size</code></td>
+<td><code>readlines</code></td>
+</tr>
+<tr>
+<td><code>print</code></td>
+<td><code>append</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>assert</code></td>
+<td><code>insert</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td><code>remove</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td><code>replace</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table><p>Note that the following Python keywords are also reserved, as svelTest programs compile to Python code:</p>
+
+<table>
+<thead><tr>
+<th></th>
+<th></th>
+<th></th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>and</code></td>
+<td><code>exec</code></td>
+<td><code>lambda</code></td>
+</tr>
+<tr>
+<td><code>as</code></td>
+<td><code>finally</code></td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>class</code></td>
+<td><code>from</code></td>
+<td><code>not</code></td>
+</tr>
+<tr>
+<td><code>def</code></td>
+<td><code>global</code></td>
+<td><code>or</code></td>
+</tr>
+<tr>
+<td><code>del</code></td>
+<td><code>import</code></td>
+<td><code>pass</code></td>
+</tr>
+<tr>
+<td><code>elif</code></td>
+<td><code>in</code></td>
+<td><code>raise</code></td>
+</tr>
+<tr>
+<td><code>except</code></td>
+<td><code>is</code></td>
+<td><code>try</code></td>
+</tr>
+<tr>
+<td><code>with</code></td>
+<td><code>yield</code></td>
+<td></td>
+</tr>
+</tbody>
+</table><p>When the declaring a new <code>funct</code> object, the user specifies the source code parameter type with this template:</p>
+
+<p><code>languageAbbreviation_type</code> (ex: <code>j_byte</code> for a Java byte, <code>j_long</code> for a Java long, etc.).  We currently support all Java 1.6, Python 2.x, and C99 primitive data types. A full list of these primitives and their styling can be found in Appendix A.</p>
+
+<h2>
+<a name="reserved" class="anchor" href="#reserved"><span class="octicon octicon-link"></span></a>Reserved</h2>
+
+<p>The following list contains characters that are reserved for use in our grammar. They may not be used in identifiers or for any purpose other than their intended use in our language.</p>
+
+<p>( ) [ ] { } ; : , .</p>
+
+<p>+ - ++ -- * / &lt; &gt; &lt;= &gt;= == = != </p>
+
+<p>&amp;&amp; || ! \ ' "</p>
+
+<h1>
+<a name="types" class="anchor" href="#types"><span class="octicon octicon-link"></span></a>Types</h1>
+
+<h2>
+<a name="basic-types" class="anchor" href="#basic-types"><span class="octicon octicon-link"></span></a>Basic Types</h2>
+
+<p>svelTest has 5 primitive types.</p>
+
+<h3>
+<a name="int" class="anchor" href="#int"><span class="octicon octicon-link"></span></a>int</h3>
+
+<p>The <code>int</code> data type represents signed integer values. Similar to the implementation in Python 2.7.x, an <code>int</code> is a two’s complement constant, is 31 bits in size, and has a range from -2147483648 through 2147483647, inclusive.</p>
+
+<h3>
+<a name="double" class="anchor" href="#double"><span class="octicon octicon-link"></span></a>double</h3>
+
+<p>The <code>double</code> data type represents machine-level double precision floating point numbers.  Similar to Python 2.7.x, the accepted range and overflow handling is dependent on your underlying machine architecture. </p>
+
+<h3>
+<a name="boolean" class="anchor" href="#boolean"><span class="octicon octicon-link"></span></a>boolean</h3>
+
+<p>The <code>boolean</code> type represents a logical quantity with two possible values, indicated by the reserved keywords <code>true</code> and <code>false</code>. Similar to Python 2.7.x, a <code>boolean</code> is a subtype of plain integers, and <code>boolean</code> values <code>true</code> and <code>false</code> behave like the integer values 1 and 0, respectively.</p>
+
+<h3>
+<a name="string" class="anchor" href="#string"><span class="octicon octicon-link"></span></a>string</h3>
+
+<p>A <code>string</code> is an immutable sequence of characters surrounded by double quotation marks. There is no separate character type; a character is simply a <code>string</code> of length one. Similar to Python 2.7.x, characters have a size of (at least) 8-bits.</p>
+
+<h3>
+<a name="file" class="anchor" href="#file"><span class="octicon octicon-link"></span></a>file</h3>
+
+<p>The <code>file</code> type is used to reference an ASCII file relative to the user’s working directory. The <code>file</code> type is a subtype of the <code>string</code> type. It contains a string that specifies the relative path from the .svel file. If the file does not exist in the path specified, the svelTest compiler will fail and throw an error.</p>
+
+<pre><code>file f = “src/Foo.java”;
+</code></pre>
+
+<p>A <code>file</code> type is used to specify the source code file (*.java, *.c, *.py) that contains the function or program to test. A file type can also be used to specify an ASCII file with the extension *.txt; this provides the option for a svelTest programmer to parse a .txt file for inputs and outputs. </p>
+
+<p>Alternatively, a file name could first be specified as a string and then used to create the file, like so:</p>
+
+<pre><code>String filename = “../lib/thisFile.java”;
+file thisFile = filename;
+</code></pre>
+
+<p>These <code>int</code>, <code>double</code>, <code>boolean</code>, and <code>string</code> primitive types may be cast to other types with the library functions <code>int()</code>, <code>double()</code>, <code>boolean()</code>, <code>string()</code>.</p>
+
+<h2>
+<a name="derived-types" class="anchor" href="#derived-types"><span class="octicon octicon-link"></span></a>Derived Types</h2>
+
+<p>Besides the basic types, there is a conceptually infinite class of derived types constructed from the fundamental types in the following ways:</p>
+
+<ul>
+<li>arrays of objects of a given type</li>
+<li>functions returning objects of a given type</li>
+</ul><p>Along with the common array and function, svelTest has three additional derived types: <code>input</code>, <code>output</code>, and <code>funct</code>.</p>
+
+<h3>
+<a name="arrays" class="anchor" href="#arrays"><span class="octicon octicon-link"></span></a>Arrays</h3>
+
+<p>The user can initialize an array with inputs in curly brackets, or use the <code>append()</code> function to add an element to the end of an existing array. Note that if the user wishes to insert values into an empty array, the user must first initialize the array as empty with curly brackets. svelTest arrays follow zero-based numbering.</p>
+
+<pre><code>int[] a = {1, 2, 3}; // valid inline declaration
+
+int[] b = {};
+b.append(1);    
+b.append(2);    
+b.append(3); 
+// b is now {1, 2, 3}
+
+int i = a[0]; // 1
+</code></pre>
+
+<p>Other supported array functions are <code>remove()</code>, <code>insert()</code>, <code>size()</code>, and <code>replace()</code>. Examples of these functions are outlined below:</p>
+
+<pre><code>int[] c = {1, 2, 3};
+// Prototype: a.remove(int index) 
+// Removes object at the specified index and returns it
+c.remove(2); // returns 3, list is now {1, 2}
+
+int[] d = {1, 2, 3};
+// Prototype: array.size()
+// Takes zero arguments.
+int j = d.size(); // 3
+
+int[] e = {1, 2, 3};
+// Prototype: a.insert(int index, Type t) 
+// Inserts and pushes back.
+e.insert(0, 4); // {4, 1, 2, 3}
+
+int[] f = {1, 2, 3};
+// Prototype: a.replace(int index, Type t);
+// Replaces object at the index and returns the old object.
+f.replace(0, 4); // {4, 2, 3}
+</code></pre>
+
+<h3>
+<a name="functions" class="anchor" href="#functions"><span class="octicon octicon-link"></span></a>Functions</h3>
+
+<p>A function is declared by specifying a return type (or <code>void</code>), name, and any parameters. For example, we have a function prototype for an add function that takes two integers as parameters and returns an integer:</p>
+
+<pre><code>int add(int x, int y)
+</code></pre>
+
+<h3>
+<a name="input" class="anchor" href="#input"><span class="octicon octicon-link"></span></a>input</h3>
+
+<p>The input data type is a wrapper for an n-sized tuple, where n represents the number of parameters of the method to test. Each value in the tuple can take the type of any data type, including those in the source code language. An input is used to specify a set of actual parameters for any method the user wants to test. Parentheses are used to denote a set of actual parameters as an input type, and commas are used to separate each parameter.</p>
+
+<pre><code>input empty = (); // method to test takes no parameters
+input single = (3); // takes a single parameter of type int
+input multiple = (“Hello World”, true); // takes two params
+</code></pre>
+
+<h3>
+<a name="output" class="anchor" href="#output"><span class="octicon octicon-link"></span></a>output</h3>
+
+<p>The output data type is a wrapper for the expected return value of the method to test. The value of an output can take the type of any source code language data type.</p>
+
+<pre><code>output out = "Hello World!";
+</code></pre>
+
+<h3>
+<a name="funct" class="anchor" href="#funct"><span class="octicon octicon-link"></span></a>funct</h3>
+
+<p>The funct type is a wrapper to specify the method to test. A funct has three fields: the method name denoted by a string, the set of the formal parameters of the method denoted using parentheses and commas, and the file type that specifies where the method is defined. The three fields are surrounded with brackets { } and separated by commas.</p>
+
+<pre><code>file f = “src/Add.java”;
+funct add = {“add”, (j_int, j_int), f};
+</code></pre>
+
+<p>In the example above, the Add.java class file contains the method with the method signature that has the name “add”, and takes two Java ints as parameters. The keyword <strong>main</strong> can be used to specify that the entire program should be run. (Note that the user could also specify “main” as the method name.) If the specified method does not exist in the file, the compiler will raise an error.</p>
+
+<h4>
+<a name="assert" class="anchor" href="#assert"><span class="octicon octicon-link"></span></a>assert</h4>
+
+<p>An object of type funct has a reserved, built-in method called assert(). The assert() method returns a boolean and takes in two parameters: an input type and output type. </p>
+
+<pre><code>boolean assert(input, output)
+</code></pre>
+
+<p>When the assert() method is called via an object of type funct, the method specified by the funct object will be tested with the given input parameters. The actual return value or contents of standard output will be validated against the expected return value or standard output contents. If the actual return value or console contents matches the expected, assert() returns true. Otherwise, it will return false.</p>
+
+<pre><code>input in = (1, 1);
+output out = (2);
+if (add.assert(in, out)) {
+    print(“add passed.”);
+} else {
+    print(“add failed.”); 
+}
+</code></pre>
+
+<p>Python’s “==” equality operator is used to test for equality between the expected output and the actual output of the function being tested. If the user wishes to test the output of a non-primitive object, that user must write their own toString() method for that object, as svelTest compares output by string representation.</p>
+
+<p>The assert method also has an optional third argument, verbose. Specifying verbose as the third argument adds additional functionality to assert(): instead of just returning true or false, assert will also print test information to standard output for you.</p>
+
+<pre><code>fib.assert(4, 3, verbose);
+// Output: fib(4)...        PASS
+</code></pre>
+
+<h4>
+<a name="the-lang-declaration" class="anchor" href="#the-lang-declaration"><span class="octicon octicon-link"></span></a>The lang Declaration</h4>
+
+<p>In order for assert() to know what kind of code you’re testing, every svelTest file must start with a lang declaration. Currently supported lang types are Java, C, Python, and None. lang declarations are of this form:</p>
+
+<pre><code>lang = Java;
+</code></pre>
+
+<h4>
+<a name="funct-restrictions" class="anchor" href="#funct-restrictions"><span class="octicon octicon-link"></span></a>funct Restrictions</h4>
+
+<p>Depending on which language is being tested, there are some restrictions on what kinds of functions can be tested successfully with funct.</p>
+
+<h5>
+<a name="java" class="anchor" href="#java"><span class="octicon octicon-link"></span></a>Java</h5>
+
+<p>Any public static function that takes Java primitives or void (including the main() method)</p>
+
+<h5>
+<a name="c" class="anchor" href="#c"><span class="octicon octicon-link"></span></a>C</h5>
+
+<p>Any main() method that C primitives or void</p>
+
+<p>Any method that takes C primitives or void contained in a file not also containing a main() method</p>
+
+<h5>
+<a name="python" class="anchor" href="#python"><span class="octicon octicon-link"></span></a>Python:</h5>
+
+<p>Any “main” method i.e. the equivalent of running <code>python &lt;file_to_test&gt;.py</code> and testing the output</p>
+
+<p>Any function contained within a class definition</p>
+
+<p>Any of the above functions that do not return primitives/void can be tested as long as the returned value can be compared with a toString() method written by the user.</p>
+
+<h4>
+<a name="funct-helper-files" class="anchor" href="#funct-helper-files"><span class="octicon octicon-link"></span></a>funct Helper Files</h4>
+
+<p>funct may create some helper files at runtime. For example, you may write addTester.svel to test the public static function add() contained in Add.java. Your code will compile to addTester.py; upon running addTester.py, the helper file Sveladd.java will be created and compiled. This allows the program to test add() individually rather than having to use the entire Add.java class. </p>
+
+<p>Note that these helper files are not removed after addTester.py finishes execution. This is for efficiency reasons: rather than creating, compiling, deleting, and repeating the entire process for every execution of assert(), the helper files are created and compiled only once. We suggest creating a Makefile with a target “clean” to remove all Svel* files after you’re done testing, or simply using a command like rm Svel*.</p>
+
+<h2>
+<a name="constants" class="anchor" href="#constants"><span class="octicon octicon-link"></span></a>Constants</h2>
+
+<h3>
+<a name="char-constants" class="anchor" href="#char-constants"><span class="octicon octicon-link"></span></a>char constants</h3>
+
+<p>Special constants that are reserved or cannot be represented without conventional keys are represented with escape sequences.</p>
+
+<ul>
+<li>newline    \n</li>
+<li>horizontal tab    \t</li>
+<li>carriage return    \r</li>
+<li>backslash    \ \</li>
+<li>single quote    \’</li>
+<li>double quote    \”</li>
+</ul><h3>
+<a name="boolean-constants" class="anchor" href="#boolean-constants"><span class="octicon octicon-link"></span></a>boolean constants</h3>
+
+<p>A boolean can either take the value true or false.</p>
+
+<h1>
+<a name="inputoutput" class="anchor" href="#inputoutput"><span class="octicon octicon-link"></span></a>Input/Output</h1>
+
+<h2>
+<a name="print" class="anchor" href="#print"><span class="octicon octicon-link"></span></a>print</h2>
+
+<p>svelTest users may send values to Standard Out using the print function.  print takes in variables of any type, converting any non-string types to strings on-the fly.</p>
+
+<pre><code>print(“Hello World!”); // prints Hello World!
+
+int a = 1;
+print(a); // prints 1
+int b = 2;
+print(b); // prints 2
+int c = a + b;
+print(c); // prints 3
+
+boolean bl = true;
+print(bl); // prints true
+</code></pre>
+
+<h2>
+<a name="reading-from-files" class="anchor" href="#reading-from-files"><span class="octicon octicon-link"></span></a>Reading from Files</h2>
+
+<p>As outlined above, the file type is used to reference an ASCII file relative to the user’s working directory. They use may use the file type to load a source code file, or a file containing streams of inputs and outputs.</p>
+
+<pre><code>file f = “../Foo.java”;
+file g = “inputs.txt”;
+file h = “outputs.txt”;
+</code></pre>
+
+<p>The file type has the reserved, built-in function readlines() that reads the entire contents of a file into a string array. The trailing newline character on each is not kept in the string.</p>
+
+<pre><code>// testcases.txt
+// 0
+// 1
+// 2
+
+file testcases = "testcases.txt";
+string[] lines = testcases.readlines();
+print(lines); // ['0', '1', '2']
+</code></pre>
+
+<h2>
+<a name="writing-to-files" class="anchor" href="#writing-to-files"><span class="octicon octicon-link"></span></a>Writing to Files</h2>
+
+<p>The user may not create new files or write to existing files in a svelTest program. If a user wishes to write the output of a svelTest program to a file, they may use the ‘&gt;’ character to redirect the contents of standard out to a new file of their choice in their favorite shell.</p>
+
+<h1>
+<a name="scope" class="anchor" href="#scope"><span class="octicon octicon-link"></span></a>Scope</h1>
+
+<p>The scope of a declaration is the region within the svel program which the entity declared by the declaration can be referred to using the name of the entity. The svelTest compiler will catch any scoping issues.</p>
+
+<h2>
+<a name="lexical-scope" class="anchor" href="#lexical-scope"><span class="octicon octicon-link"></span></a>Lexical Scope</h2>
+
+<p>A code block defines the scope of a variable. Variables declared in a specific scope are not visible from outside that block. Furthermore, variables declared in the same scope must have unique names.</p>
+
+<h2>
+<a name="global-scope" class="anchor" href="#global-scope"><span class="octicon octicon-link"></span></a>Global Scope</h2>
+
+<p>Variables declared outside of functions are considered to have a global scope.  These variables exist in all other scopes throughout the program.</p>
+
+<h2>
+<a name="function-scope" class="anchor" href="#function-scope"><span class="octicon octicon-link"></span></a>Function Scope</h2>
+
+<p>Variables declared inside functions exist only within the scope of that function, and die upon the termination of that function.</p>
+
+<h2>
+<a name="statement-block-scope" class="anchor" href="#statement-block-scope"><span class="octicon octicon-link"></span></a>Statement Block Scope</h2>
+
+<p>Variables declared inside statement blocks exist only within the scope of that statement, and die upon leaving the block.</p>
+
+<h2>
+<a name="scope-of-functions" class="anchor" href="#scope-of-functions"><span class="octicon octicon-link"></span></a>Scope of Functions</h2>
+
+<p>svelTest requires users to define a function before using it. For example, the following syntax is not valid:</p>
+
+<pre><code>main() { 
+notDefined(); 
+}
+
+void notDefined() {
+    print “This function is not defined correctly.”;
+}
+</code></pre>
+
+<pre><code>The following syntax is valid:
+void defined() {
+    print(“This function is defined correctly.”);
+}
+
+main() {
+    defined();
+}
+</code></pre>
+
+<h1>
+<a name="expressions" class="anchor" href="#expressions"><span class="octicon octicon-link"></span></a>Expressions</h1>
+
+<h2>
+<a name="primary-expressions" class="anchor" href="#primary-expressions"><span class="octicon octicon-link"></span></a>Primary Expressions</h2>
+
+<p>Primary expressions are identifiers, constants, or strings.  Constants are defined by a number (integer), decimal number, true and false boolean statements, function calls, and reference types (for accessing array elements).</p>
+
+<pre><code>primary_expr :  ID
+         | STRINGLITERAL
+         | NUMBER
+         | DECIMAL
+         | TRUE
+         | FALSE
+         | function_call
+         | ref_type
+</code></pre>
+
+<h2>
+<a name="function-calls" class="anchor" href="#function-calls"><span class="octicon octicon-link"></span></a>Function Calls</h2>
+
+<p>A function call is a postfix expression that consists of a function name and parameter list surrounded by parentheses.  Casting to the various data types is also done through Function calls.</p>
+
+<pre><code>function_call : ID LPAREN identifier_list RPAREN
+                | STRING LPAREN logical_OR_expr RPAREN
+                | INT LPAREN logical_OR_expr RPAREN
+                | BOOLEAN LPAREN logical_OR_expr RPAREN
+                | DOUBLE LPAREN logical_OR_expr RPAREN
+                | PRINT LPAREN logical_OR_expr RPAREN
+                | ID PERIOD lib_function LPAREN identifier_list RPAREN
+</code></pre>
+
+<h2>
+<a name="multiplicative-operators" class="anchor" href="#multiplicative-operators"><span class="octicon octicon-link"></span></a>Multiplicative Operators</h2>
+
+<p>The multiplicative operators are * (multiplication) and / (division), and group left-to-right.</p>
+
+<pre><code>multiplicative_expr : secondary_expr
+                    | multiplicative_expr TIMES secondary_expr
+                    | multiplicative_expr DIVIDE secondary_expr
+</code></pre>
+
+<p>The modulus operation is not supported in svelTest.</p>
+
+<h2>
+<a name="additive-operators" class="anchor" href="#additive-operators"><span class="octicon octicon-link"></span></a>Additive Operators</h2>
+
+<p>The additive operators are + (addition) and - (subtraction), and group left-to-right.</p>
+
+<pre><code>additive_expr : multiplicative_expr
+            | additive_expr PLUS multiplicative_expr
+            | additive_expr MINUS multiplicative_expr
+</code></pre>
+
+<h2>
+<a name="relational-operators" class="anchor" href="#relational-operators"><span class="octicon octicon-link"></span></a>Relational Operators</h2>
+
+<p>The relational operators are &lt; (less), &gt; (greater), &lt;= (less or equal), &gt;= (greater or equal).</p>
+
+<pre><code>relational_expr : additive_expr
+                | relational_expr LS_OP additive_expr
+                | relational_expr LE_OP additive_expr
+                | relational_expr GR_OP additive_expr
+                | relational_expr GE_OP additive_expr
+</code></pre>
+
+<h2>
+<a name="equality-operators" class="anchor" href="#equality-operators"><span class="octicon octicon-link"></span></a>Equality Operators</h2>
+
+<p>The equality operators are == (equal to) and != (not equal to), and have lower precedence than the relational operators.</p>
+
+<pre><code>equality_expr : relational_expr
+            | equality_expr EQ relational_expr
+            | equality_expr NEQ relational_expr
+</code></pre>
+
+<h2>
+<a name="logical-and-operator" class="anchor" href="#logical-and-operator"><span class="octicon octicon-link"></span></a>Logical AND Operator</h2>
+
+<p>The logical AND (&amp;&amp;) operator groups left-to-right.</p>
+
+<pre><code>logical_AND_expr : equality_expr
+                | logical_AND_expr AND equality_expr
+</code></pre>
+
+<h2>
+<a name="logical-or-operator" class="anchor" href="#logical-or-operator"><span class="octicon octicon-link"></span></a>Logical OR Operator</h2>
+
+<p>The logical OR (||) operator groups left-to-right.</p>
+
+<pre><code>logical_OR_expr : logical_AND_expr
+                | logical_OR_expr OR logical_AND_expr
+</code></pre>
+
+<h2>
+<a name="assignment-expression" class="anchor" href="#assignment-expression"><span class="octicon octicon-link"></span></a>Assignment Expression</h2>
+
+<p>Assignment expressions evaluate right-to-left.  The left operand must be an identifier. svelTest is statically typed.</p>
+
+<pre><code>assignment_expr : FUNCT ID ASSIGN LBRACE funct_name COMMA LPAREN reserved_languages_list RPAREN COMMA primary_expr RBRACE
+                | type ID ASSIGN assignment_expr
+                | ID ASSIGN assignment_expr
+                | logical_OR_expr
+</code></pre>
+
+<h2>
+<a name="declarations-and-definitions" class="anchor" href="#declarations-and-definitions"><span class="octicon octicon-link"></span></a>Declarations and Definitions</h2>
+
+<p>Declarations specify how an identifier should be interpreted and do not necessarily reserve storage.</p>
+
+<pre><code>external_declaration : function_def
+                    | type ID SEMICOLON
+                    | type ID ASSIGN assignment_expr SEMICOLON
+</code></pre>
+
+<p>Definitions also specify how an identifier should be interpreted and do reserve storage.</p>
+
+<pre><code>function_def : VOID ID LPAREN param_list RPAREN brack_stmt
+ | type ID LPAREN param_list RPAREN brack_stmt
+ | MAIN LPAREN param_list RPAREN brack_stmt
+</code></pre>
+
+<h2>
+<a name="statements" class="anchor" href="#statements"><span class="octicon octicon-link"></span></a>Statements</h2>
+
+<p>Statements are executed for their effect, and do not have values.  In addition, statements are normally executed in sequence.</p>
+
+<pre><code>stmts : stmts stmt
+    | stmt
+    | brack_stmt
+
+stmt : expression_stmt
+     | ifelse_stmt
+     | loop_stmt
+     | jump_stmt
+</code></pre>
+
+<h3>
+<a name="expression-statement" class="anchor" href="#expression-statement"><span class="octicon octicon-link"></span></a>Expression Statement</h3>
+
+<p>Expressions ended with a semicolon (;) are Expression Statements. The result of the expression statement evaluation is not stored unless explicitly reassigned to a new identifier.</p>
+
+<pre><code>expression_stmt : expression SEMICOLON
+
+expression : assignment_expr
+            | type ID
+            | empty
+</code></pre>
+
+<h3>
+<a name="if-else-statements" class="anchor" href="#if-else-statements"><span class="octicon octicon-link"></span></a>If-Else Statements</h3>
+
+<p>If-else statements define the if and if-else control-flow mechanisms.</p>
+
+<pre><code>ifelse_stmt : IF LPAREN expression RPAREN brack_stmt
+            | IF LPAREN expression RPAREN brack_stmt ELSE brack_stmt
+</code></pre>
+
+<p>The expression contained within the parentheses is evaluated as a boolean or boolean equivalent. If this expression is true, the first statement is evaluated. If the expression is false the statement following the else is evaluated, or none in the case that there is no else.</p>
+
+<p>The ambiguity of the dangling-else problem is handled by binding each else to the nearest if statement.</p>
+
+<h3>
+<a name="loop-statements" class="anchor" href="#loop-statements"><span class="octicon octicon-link"></span></a>Loop Statements</h3>
+
+<p>Loop statements define the the while and for looping mechanisms.</p>
+
+<pre><code>loop_stmt : WHILE LPAREN expression RPAREN brack_stmt
+        | FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN brack_stmt
+</code></pre>
+
+<p>The while loop works by first evaluating the expression contained within the parentheses and executing the statement if the expression evaluates to true. The loop will continue to evaluate this expression before each iteration until it evaluates to false, at which point the loop will terminate.</p>
+
+<p>The first expression of the for loop is evaluated once and is generally used for the initialization mechanism of loop. The second expression is evaluated before each iteration of the for loop and is analogous to the parenthesized expression in the while loop. Note that a missing second expression will be evaluated to true. The third and final expression is evaluated at the end of each iteration, after the statement has been executed, and is generally used to update the state of the loop (e.g. a counter).</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
