@@ -572,3 +572,112 @@ loop_stmt : WHILE LPAREN expression RPAREN brack_stmt
 The while loop works by first evaluating the expression contained within the parentheses and executing the statement if the expression evaluates to true. The loop will continue to evaluate this expression before each iteration until it evaluates to false, at which point the loop will terminate.
 
 The first expression of the for loop is evaluated once and is generally used for the initialization mechanism of loop. The second expression is evaluated before each iteration of the for loop and is analogous to the parenthesized expression in the while loop. Note that a missing second expression will be evaluated to true. The third and final expression is evaluated at the end of each iteration, after the statement has been executed, and is generally used to update the state of the loop (e.g. a counter).
+
+# Grammar
+```
+Rule 0     S' -> outer_unit
+Rule 1     outer_unit -> lang_def translation_unit
+Rule 2     lang_def -> LANG ASSIGN ID SEMICOLON
+Rule 3     lang_def -> LANG ASSIGN NONE SEMICOLON
+Rule 4     translation_unit -> external_declaration
+Rule 5     translation_unit -> translation_unit external_declaration
+Rule 6     external_declaration -> function_def
+Rule 7     external_declaration -> type ID SEMICOLON
+Rule 8     external_declaration -> type ID ASSIGN assignment_expr SEMICOLON
+Rule 9     function_def -> VOID ID LPAREN param_list RPAREN brack_stmt
+Rule 10    function_def -> type ID LPAREN param_list RPAREN brack_stmt
+Rule 11    function_def -> MAIN LPAREN param_list RPAREN brack_stmt
+Rule 12    type -> INT
+Rule 13    type -> DOUBLE
+Rule 14    type -> BOOLEAN
+Rule 15    type -> CHAR
+Rule 16    type -> STRING
+Rule 17    type -> FUNCT
+Rule 18    type -> INPUT
+Rule 19    type -> OUTPUT
+Rule 20    type -> FILE
+Rule 21    type -> type LBRACKET RBRACKET
+Rule 22    ref_type -> ID LBRACKET assignment_expr RBRACKET
+Rule 23    param_list -> param_list COMMA parameter
+Rule 24    param_list -> parameter
+Rule 25    parameter -> type ID
+Rule 26    parameter -> empty
+Rule 27    brack_stmt -> LBRACE stmts RBRACE
+Rule 28    stmts -> stmts stmt
+Rule 29    stmts -> stmt
+Rule 30    stmts -> brack_stmt
+Rule 31    stmt -> expression_stmt
+Rule 32    stmt -> ifelse_stmt
+Rule 33    stmt -> loop_stmt
+Rule 34    stmt -> jump_stmt
+Rule 35    expression_stmt -> expression SEMICOLON
+Rule 36    expression -> assignment_expr
+Rule 37    expression -> type ID
+Rule 38    expression -> empty
+Rule 39    assignment_expr -> FUNCT ID ASSIGN LBRACE funct_name COMMA LPAREN reserved_languages_list RPAREN COMMA primary_expr RBRACE
+Rule 40    assignment_expr -> type ID ASSIGN assignment_expr
+Rule 41    assignment_expr -> ID ASSIGN assignment_expr
+Rule 42    assignment_expr -> logical_OR_expr
+Rule 43    funct_name -> __MAIN__
+Rule 44    funct_name -> primary_expr
+Rule 45    logical_OR_expr -> logical_AND_expr
+Rule 46    logical_OR_expr -> logical_OR_expr OR logical_AND_expr
+Rule 47    logical_AND_expr -> equality_expr
+Rule 48    logical_AND_expr -> logical_AND_expr AND equality_expr
+Rule 49    equality_expr -> relational_expr
+Rule 50    equality_expr -> equality_expr EQ relational_expr
+Rule 51    equality_expr -> equality_expr NEQ relational_expr
+Rule 52    relational_expr -> additive_expr
+Rule 53    relational_expr -> relational_expr LS_OP additive_expr
+Rule 54    relational_expr -> relational_expr LE_OP additive_expr
+Rule 55    relational_expr -> relational_expr GR_OP additive_expr
+Rule 56    relational_expr -> relational_expr GE_OP additive_expr
+Rule 57    additive_expr -> multiplicative_expr
+Rule 58    additive_expr -> additive_expr PLUS multiplicative_expr
+Rule 59    additive_expr -> additive_expr MINUS multiplicative_expr
+Rule 60    multiplicative_expr -> secondary_expr
+Rule 61    multiplicative_expr -> multiplicative_expr TIMES secondary_expr
+Rule 62    multiplicative_expr -> multiplicative_expr DIVIDE secondary_expr
+Rule 63    secondary_expr -> primary_expr
+Rule 64    secondary_expr -> LPAREN identifier_list RPAREN
+Rule 65    secondary_expr -> LBRACE identifier_list RBRACE
+Rule 66    primary_expr -> ID
+Rule 67    primary_expr -> STRINGLITERAL
+Rule 68    primary_expr -> NUMBER
+Rule 69    primary_expr -> DECIMAL
+Rule 70    primary_expr -> TRUE
+Rule 71    primary_expr -> FALSE
+Rule 72    primary_expr -> function_call
+Rule 73    primary_expr -> ref_type
+Rule 74    function_call -> ID LPAREN identifier_list RPAREN
+Rule 75    function_call -> STRING LPAREN logical_OR_expr RPAREN
+Rule 76    function_call -> INT LPAREN logical_OR_expr RPAREN
+Rule 77    function_call -> BOOLEAN LPAREN logical_OR_expr RPAREN
+Rule 78    function_call -> DOUBLE LPAREN logical_OR_expr RPAREN
+Rule 79    function_call -> PRINT LPAREN logical_OR_expr RPAREN
+Rule 80    function_call -> ID PERIOD lib_function LPAREN identifier_list RPAREN
+Rule 81    lib_function -> ASSERT
+Rule 82    lib_function -> REMOVE
+Rule 83    lib_function -> SIZE
+Rule 84    lib_function -> INSERT
+Rule 85    lib_function -> REPLACE
+Rule 86    lib_function -> READLINES
+Rule 87    reserved_languages_list -> reserved_language_keyword
+Rule 88    reserved_languages_list -> reserved_languages_list COMMA reserved_language_keyword
+Rule 89    reserved_language_keyword -> RES_LANG LBRACKET RBRACKET
+Rule 90    reserved_language_keyword -> reserved_language_keyword TIMES
+Rule 91    reserved_language_keyword -> RES_LANG
+Rule 92    reserved_language_keyword -> empty
+Rule 93    identifier_list -> logical_OR_expr
+Rule 94    identifier_list -> identifier_list COMMA VERBOSE
+Rule 95    identifier_list -> identifier_list COMMA logical_OR_expr
+Rule 96    identifier_list -> empty
+Rule 97    ifelse_stmt -> IF LPAREN expression RPAREN brack_stmt
+Rule 98    ifelse_stmt -> IF LPAREN expression RPAREN brack_stmt ELSE brack_stmt
+Rule 99    loop_stmt -> WHILE LPAREN expression RPAREN brack_stmt
+Rule 100   loop_stmt -> FOR LPAREN expression SEMICOLON expression SEMICOLON expression RPAREN brack_stmt
+Rule 101   jump_stmt -> BREAK SEMICOLON
+Rule 102   jump_stmt -> CONTINUE SEMICOLON
+Rule 103   jump_stmt -> RETURN logical_OR_expr SEMICOLON
+Rule 104   empty -> <empty>
+```
