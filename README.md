@@ -1,5 +1,8 @@
 svelTest Language Reference Manual
 ==================================
+Welcome! This is the documentation for svelTest. Last updated May 10, 2014.
+
+For new programmers, our [tutorial](http://sveltest.github.io/tutorial) is a great resource to help you get started.
 
 # Table of Contents
 1. [Introduction](#introduction)
